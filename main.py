@@ -28,7 +28,7 @@ q1_switch3 = 'C) so beautiful e' # must be taken from the entrance
 q1_switch4 = 'D) anything was ' # must be taken from the entrance
 
 # code1
-q1_code = 'Code: 123456789' # must be taken from the entrance
+q1_code = 'Code: po345hjk' # must be taken from the entrance
 
 # coordinates of the question1
 question1_x = 0
@@ -95,7 +95,7 @@ else:
     pdf.cell(w=59, h=6, txt=q1_switch3, ln=2, align='L')
     pdf.cell(w=58, h=6, txt=q1_switch4, ln=2, align='L')
 
-pdf.set_xy(x=question1_x + 10 , y=question1_y + 88)
+pdf.set_xy(x=question1_x + 10 + 62 , y=question1_y + 88)
 pdf.cell(w=59, h=6, txt=q1_code, ln=0, align='L')
 
 pdf.output('q.pdf')
