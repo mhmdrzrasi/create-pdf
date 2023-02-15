@@ -1,61 +1,43 @@
 from fpdf import FPDF
 
-# text of the question1
-question1 = input()
-while '.........' in question1:
-    question1 = question1.replace('.........', '........')
-while '……………' in question1:
-    question1 = question1.replace('……………', '………')
-question1 = question1.split(' ')
-lines = []
+def question(pdf):
+    # text of the question
+    question = input('Q: ')
+    while '.........' in question:
+        question = question.replace('.........', '........')
+    while '……………' in question:
+        question = question.replace('……………', '………')
+    question = question.split(' ')
 
-def lines_of_question1(pdf, lines):
+    lines = []
     line = ''
-    for word in question1:
+    for word in question:
         if pdf.get_string_width(line + word) <= 117:
             line += (word + ' ')
-            if word == question1[-1]:
+            if word == question[-1]:
                 lines.append(line)
         else:
             lines.append(line)
             line = word + ' '
-    return lines
+    # return lines
 
-# question1 switchs
-q1_switch1 = 'A) anything so beal' # must be taken from the entrance
-q1_switch2 = 'B) so beautiful anyt11111111' # must be taken from the entrance
-q1_switch3 = 'C) so beautiful e' # must be taken from the entrance
-q1_switch4 = 'D) anything was ' # must be taken from the entrance
+    # question switchs
+    q_switch1 = 'A) ' + input('A) ')
+    q_switch2 = 'B) ' + input('B) ')
+    q_switch3 = 'C) ' + input('C) ')
+    q_switch4 = 'D) ' + input('D) ')
 
-# code1
-q1_code = 'Code: po345hjk' # must be taken from the entrance
+    if q_switch4 == 'D)' or q_switch4 == 'D) ':
+        q_switch4 = ''
 
-# coordinates of the question1
-question1_x = 0
-question1_y = 0
+    # code1
+    q_code = 'Code: ' + input('code: ')
 
-# text of the question2
-# question2 switchs
-# code2
-# coordinates of the question2
-question2_x = 149
-question2_y = 0
+    # coordinates of the question
+    question_x = 0
+    question_y = 0
 
-
-# text of the question3
-# question3 switchs
-# code3
-# coordinates of the question3
-question3_x = 0
-question3_y = 106
-
-
-# text of the question4
-# question4 switchs
-# code4
-# coordinates of the question4
-question4_x = 149
-question4_y = 106
+    return {"lines" : lines, "q_switch1" : q_switch1, "q_switch2" : q_switch2, "q_switch3" : q_switch3, "q_switch4" : q_switch4, "q_code" : q_code, "question_x" : question_x, "question_y" : question_y}
 
 
 # create landscape A4 page
@@ -74,28 +56,50 @@ pdf.image(name= 'A4.jpg', x=0, y=0, w=297, h=210, type='jpg')
 
 # 1111111111111111111
 
-pdf.set_xy(x=question1_x + 10, y=question1_y + 23)
+for i in range(1,5):
+    q = question(pdf=pdf)
 
-lines = lines_of_question1(pdf=pdf, lines=lines)
-for line in lines:
-    pdf.cell(w=10, h=6, txt=line, ln=2, align='L')
-pdf.dashed_line(x1=pdf.get_x()+1, y1=pdf.get_y()+1.7, x2=pdf.get_x()+122, y2=pdf.get_y()+1.7, dash_length=1, space_length=1)
+    if i == 1:
+        q['question_x'] = 0
+        q['question_y'] = 0
+    elif i == 2:
+        q['question_x'] = 149
+        q['question_y'] = 0
+    elif i == 3:
+        q['question_x'] = 0
+        q['question_y'] = 106
+    elif i == 4:
+        q['question_x'] = 149
+        q['question_y'] = 106
+    else:
+        print("err", '******************')
 
-pdf.set_xy(x=question1_x + 10, y=question1_y + 23 + (len(lines) + 1) * 6 - 2)
+    pdf.set_xy(x=q["question_x"] + 10, y=q["question_y"] + 23)
 
-if pdf.get_string_width(q1_switch1) <= 58 and pdf.get_string_width(q1_switch2) <= 58 and pdf.get_string_width(q1_switch3) <= 58 and pdf.get_string_width(q1_switch4) <= 58:
-    pdf.cell(w=59, h=6, txt=q1_switch1, ln=0, align='L')
-    pdf.cell(w=58, h=6, txt=q1_switch2, ln=0, align='L')
-    pdf.set_xy(x=question1_x + 10, y=question1_y + 23 + (len(lines) + 2) * 6 - 2)
-    pdf.cell(w=59, h=6, txt=q1_switch3, ln=0, align='L')
-    pdf.cell(w=58, h=6, txt=q1_switch4, ln=0, align='L')
+    for line in q["lines"]:
+        pdf.cell(w=10, h=6, txt=line, ln=2, align='L')
+    pdf.dashed_line(x1=pdf.get_x()+1, y1=pdf.get_y()+1.7, x2=pdf.get_x()+122, y2=pdf.get_y()+1.7, dash_length=1, space_length=1)
+
+    pdf.set_xy(x=q["question_x"] + 10, y=q["question_y"] + 23 + (len(q["lines"]) + 1) * 6 - 2)
+
+    if pdf.get_string_width(q["q_switch1"]) <= 58 and pdf.get_string_width(q["q_switch2"]) <= 58 and pdf.get_string_width(q["q_switch3"]) <= 58 and pdf.get_string_width(q["q_switch4"]) <= 58:
+        pdf.cell(w=59, h=6, txt=q["q_switch1"], ln=0, align='L')
+        pdf.cell(w=58, h=6, txt=q["q_switch2"], ln=0, align='L')
+        pdf.set_xy(x=q["question_x"] + 10, y=q["question_y"] + 23 + (len(q["lines"]) + 2) * 6 - 2)
+        pdf.cell(w=59, h=6, txt=q["q_switch3"], ln=0, align='L')
+        pdf.cell(w=58, h=6, txt=q["q_switch4"], ln=0, align='L')
+    else:
+        pdf.cell(w=59, h=6, txt=q["q_switch1"], ln=2, align='L')
+        pdf.cell(w=58, h=6, txt=q["q_switch2"], ln=2, align='L')
+        pdf.cell(w=59, h=6, txt=q["q_switch3"], ln=2, align='L')
+        pdf.cell(w=58, h=6, txt=q["q_switch4"], ln=2, align='L')
+
+    pdf.set_xy(x=q["question_x"] + 10 + 62 , y=q["question_y"] + 88)
+    pdf.cell(w=59, h=6, txt=q["q_code"], ln=0, align='L')
+
+check = input('check (y/n?) :')
+if check == 'y' or check == 'Y':
+    num = input('return your page number :')
+    pdf.output('p' + str(num) + '.pdf')
 else:
-    pdf.cell(w=59, h=6, txt=q1_switch1, ln=2, align='L')
-    pdf.cell(w=58, h=6, txt=q1_switch2, ln=2, align='L')
-    pdf.cell(w=59, h=6, txt=q1_switch3, ln=2, align='L')
-    pdf.cell(w=58, h=6, txt=q1_switch4, ln=2, align='L')
-
-pdf.set_xy(x=question1_x + 10 + 62 , y=question1_y + 88)
-pdf.cell(w=59, h=6, txt=q1_code, ln=0, align='L')
-
-pdf.output('q.pdf')
+    pass
