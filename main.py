@@ -19,6 +19,8 @@ def question(pdf):
         else:
             lines.append(line)
             line = word + ' '
+            if word == question[-1]:
+                lines.append(line)
     # return lines
 
     # question switchs
